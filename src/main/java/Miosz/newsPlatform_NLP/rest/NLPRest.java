@@ -23,12 +23,8 @@ public class NLPRest{
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSearch(@PathParam("id") String newsId){
-        try {
-            System.out.println("Starting Finder for: " + newsId);
-            new BasicNER().entityFinder(newsId);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        System.out.println("Starting Finder for: " + newsId);
+        new BasicNER().entityFinder(newsId);
 
         return Response.ok(MediaType.APPLICATION_JSON).header("Access-Control-Allow-Origin", "*").build();
     }
