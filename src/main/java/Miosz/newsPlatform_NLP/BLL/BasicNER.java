@@ -3,6 +3,7 @@ package Miosz.newsPlatform_NLP.BLL;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 import Miosz.newsPlatform_NLP.DAL.Edges;
 import Miosz.newsPlatform_NLP.DAL.News;
@@ -25,7 +26,7 @@ public class BasicNER {
         TokenizerME tokenizer = new TokenizerME(tokenModel);
 
         String[] tokens = tokenizer.tokenize(sentence);
-
+        System.out.println(Arrays.toString(tokens));
         InputStream inputStreamPersonFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-person.bin");
         TokenNameFinderModel personModel = new TokenNameFinderModel(inputStreamPersonFinder);
 
@@ -40,26 +41,25 @@ public class BasicNER {
         TokenNameFinderModel organizationModel = new TokenNameFinderModel(inputStreamOrganizationFinder);
 
         NameFinderME organizationFinder = new NameFinderME(organizationModel);
-
+        System.out.println("Creating News Node");
         new Nodes().createNewsNode(newsId,news.getString("title") , "news");
-
+        System.out.println("Start Entity Finder method");
         findEntity(tokens, personFinder, newsId);
         findEntity(tokens, locationFinder, newsId);
         findEntity(tokens, organizationFinder, newsId);
     }
 
     public void findEntity(String[] tokens, NameFinderME finder, String newsId){
-        System.out.println("Start Entity Finder method");
         Span[] entities = finder.find(tokens);
         for(Span s: entities){
-            String entity = "";
+            StringBuilder entity = new StringBuilder();
 
             for (int i = s.getStart(); i < s.getEnd(); i++) {
-                entity = "" + entity +" "+ tokens[i];
+                entity = new StringBuilder("" + entity + " " + tokens[i]);
             }
             System.out.println(s.toString()+ " " + entity);
 
-            String nodeID = new Nodes().createNode(entity, s.getType()).get("_id").toString();
+            String nodeID = new Nodes().createNode(entity.toString(), s.getType()).get("_id").toString();
 
             new Edges().createEdgeToNews(newsId, nodeID);
         }
