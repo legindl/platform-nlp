@@ -15,7 +15,7 @@ public class NLPRest{
 
     @GET
     @Produces(MediaType.TEXT_HTML)
-    public void get() throws Exception {
+    public void get() {
         System.out.println("NLP up");
     }
 
@@ -24,6 +24,7 @@ public class NLPRest{
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSearch(@PathParam("id") String newsId){
         try {
+            System.out.println("Starting Finder for: " + newsId);
             new BasicNER().entityFinder(newsId);
         } catch (IOException e) {
             e.printStackTrace();
