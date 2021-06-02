@@ -49,6 +49,7 @@ public class BasicNER {
     }
 
     public void findEntity(String[] tokens, NameFinderME finder, String newsId){
+        System.out.println("Start Entity Finder method");
         Span[] entities = finder.find(tokens);
         for(Span s: entities){
             String entity = "";
