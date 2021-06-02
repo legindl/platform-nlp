@@ -1,7 +1,6 @@
 package Miosz.newsPlatform_NLP.BLL;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,7 +24,7 @@ public class BasicNER {
         TokenizerModel tokenModel = new TokenizerModel(inputStreamTokenizer);
         TokenizerME tokenizer = new TokenizerME(tokenModel);
 
-        String tokens[] = tokenizer.tokenize(sentence);
+        String[] tokens = tokenizer.tokenize(sentence);
 
         InputStream inputStreamPersonFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-person.bin");
         TokenNameFinderModel personModel = new TokenNameFinderModel(inputStreamPersonFinder);
@@ -51,12 +50,12 @@ public class BasicNER {
     }
 
     public void findEntity(String[] tokens, NameFinderME finder, String newsId){
-        Span entities[] = finder.find(tokens);
+        Span[] entities = finder.find(tokens);
         for(Span s: entities){
             String entity = "";
 
             for (int i = s.getStart(); i < s.getEnd(); i++) {
-                entity = entity +" "+ tokens[i];
+                entity = "" + entity +" "+ tokens[i];
             }
             System.out.println(s.toString()+ " " + entity);
 

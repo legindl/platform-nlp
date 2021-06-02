@@ -7,10 +7,8 @@ import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
-import static com.mongodb.client.model.Filters.eq;
-
 public class Edges {
-    public Document createEdgeToNews(String newsID, String nodeID){
+    public void createEdgeToNews(String newsID, String nodeID){
         MongoClient mongoClient = MongoClients.create("mongodb://mongo:27017");
         MongoDatabase database = mongoClient.getDatabase("TestGraphDatabase");
 
@@ -23,13 +21,10 @@ public class Edges {
         criteria.append("target", nodeID);
         if(database.getCollection("Edges").find(criteria).first() == null){
             database.getCollection("Edges").insertOne(node);
-            mongoClient.close();
-            return node;
         }
         else{
             System.out.println("Edge Already exists");
-            mongoClient.close();
-            return node;
         }
+        mongoClient.close();
     }
 }

@@ -19,17 +19,15 @@ public class Nodes {
 
         if(database.getCollection("Nodes").find(eq("name", name)).first() == null){
             database.getCollection("Nodes").insertOne(node);
-            mongoClient.close();
-            return node;
         }
         else{
             System.out.println("Node Already exists");
-            mongoClient.close();
-            return node;
         }
+        mongoClient.close();
+        return node;
     }
 
-    public Document createNewsNode(String Id,String name, String type){
+    public void createNewsNode(String Id, String name, String type){
         MongoClient mongoClient = MongoClients.create("mongodb://mongo:27017");
         MongoDatabase database = mongoClient.getDatabase("TestGraphDatabase");
 
@@ -39,13 +37,10 @@ public class Nodes {
 
         if(database.getCollection("Nodes").find(eq("name", name)).first() == null){
             database.getCollection("Nodes").insertOne(node);
-            mongoClient.close();
-            return node;
         }
         else{
             System.out.println("Node Already exists");
-            mongoClient.close();
-            return node;
         }
+        mongoClient.close();
     }
 }
