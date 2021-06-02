@@ -17,8 +17,8 @@ import org.bson.Document;
 public class BasicNER {
     public void entityFinder(String newsId) throws IOException {
         Document news = new News().ReadNews(newsId);
-        System.out.println(news.toString());
         String sentence = news.getString("content");
+
         System.out.println("Starting Tokenizer");
         InputStream inputStreamTokenizer = new FileInputStream("/usr/local/tomcat/webapps/models/en-token.bin");
         TokenizerModel tokenModel = new TokenizerModel(inputStreamTokenizer);
@@ -31,8 +31,7 @@ public class BasicNER {
 
         NameFinderME personFinder = new NameFinderME(personModel);
 
-        InputStream inputStreamLocationFinder = new
-                FileInputStream("/usr/local/tomcat/webapps/models/en-ner-location.bin");
+        InputStream inputStreamLocationFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-location.bin");
         TokenNameFinderModel locationModel = new TokenNameFinderModel(inputStreamLocationFinder);
 
         NameFinderME locationFinder = new NameFinderME(locationModel);
