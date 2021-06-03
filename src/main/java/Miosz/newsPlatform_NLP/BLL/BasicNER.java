@@ -24,6 +24,9 @@ public class BasicNER {
         TokenNameFinderModel personModel = null;
         TokenNameFinderModel locationModel = null;
         TokenNameFinderModel organizationModel = null;
+        System.out.println("Creating News Node");
+        new Nodes().createNewsNode(newsId,news.getString("title") , "news");
+        System.out.println("Start Entity Finder method");
         try {
             inputStreamTokenizer = new FileInputStream("/usr/local/tomcat/webapps/models/en-token.bin");
             tokenModel = new TokenizerModel(inputStreamTokenizer);
@@ -39,10 +42,12 @@ public class BasicNER {
         try {
             InputStream inputStreamPersonFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-person.bin");
             personModel = new TokenNameFinderModel(inputStreamPersonFinder);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
         NameFinderME personFinder = new NameFinderME(personModel);
+        findEntity(tokens, personFinder, newsId);
         System.out.println("locationModel");
         try {
             InputStream inputStreamLocationFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-location.bin");
@@ -51,6 +56,7 @@ public class BasicNER {
             e.printStackTrace();
         }
         NameFinderME locationFinder = new NameFinderME(locationModel);
+        findEntity(tokens, locationFinder, newsId);
         System.out.println("organizationModel");
         try {
             InputStream inputStreamOrganizationFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-organization.bin");
@@ -59,12 +65,9 @@ public class BasicNER {
             e.printStackTrace();
         }
         NameFinderME organizationFinder = new NameFinderME(organizationModel);
-        System.out.println("Creating News Node");
-        new Nodes().createNewsNode(newsId,news.getString("title") , "news");
-        System.out.println("Start Entity Finder method");
-        findEntity(tokens, personFinder, newsId);
-        findEntity(tokens, locationFinder, newsId);
         findEntity(tokens, organizationFinder, newsId);
+
+
     }
 
     public void findEntity(String[] tokens, NameFinderME finder, String newsId){
