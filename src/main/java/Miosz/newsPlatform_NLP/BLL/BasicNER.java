@@ -21,12 +21,11 @@ public class BasicNER {
         System.out.println("Starting Tokenizer");
         InputStream inputStreamTokenizer;
         TokenizerModel tokenModel = null;
-        TokenNameFinderModel personModel = null;
-        TokenNameFinderModel locationModel = null;
-        TokenNameFinderModel organizationModel = null;
+
         System.out.println("Creating News Node");
         new Nodes().createNewsNode(newsId,news.getString("title") , "news");
         System.out.println("Start Entity Finder method");
+
         try {
             inputStreamTokenizer = new FileInputStream("/usr/local/tomcat/webapps/models/en-token.bin");
             tokenModel = new TokenizerModel(inputStreamTokenizer);
@@ -37,8 +36,10 @@ public class BasicNER {
         TokenizerME tokenizer = new TokenizerME(tokenModel);
 
         String[] tokens = tokenizer.tokenize(sentence);
+        tokenizer=null;
         System.out.println(tokens.length);
         System.out.println("personModel");
+        TokenNameFinderModel personModel = null;
         try {
             InputStream inputStreamPersonFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-person.bin");
             personModel = new TokenNameFinderModel(inputStreamPersonFinder);
@@ -48,7 +49,9 @@ public class BasicNER {
         }
         NameFinderME personFinder = new NameFinderME(personModel);
         findEntity(tokens, personFinder, newsId);
+        personFinder=null;
         System.out.println("locationModel");
+        TokenNameFinderModel locationModel = null;
         try {
             InputStream inputStreamLocationFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-location.bin");
             locationModel = new TokenNameFinderModel(inputStreamLocationFinder);
@@ -57,7 +60,9 @@ public class BasicNER {
         }
         NameFinderME locationFinder = new NameFinderME(locationModel);
         findEntity(tokens, locationFinder, newsId);
+        locationFinder=null;
         System.out.println("organizationModel");
+        TokenNameFinderModel organizationModel = null;
         try {
             InputStream inputStreamOrganizationFinder = new FileInputStream("/usr/local/tomcat/webapps/models/en-ner-organization.bin");
             organizationModel = new TokenNameFinderModel(inputStreamOrganizationFinder);
@@ -66,8 +71,7 @@ public class BasicNER {
         }
         NameFinderME organizationFinder = new NameFinderME(organizationModel);
         findEntity(tokens, organizationFinder, newsId);
-
-
+        organizationFinder=null;
     }
 
     public void findEntity(String[] tokens, NameFinderME finder, String newsId){
