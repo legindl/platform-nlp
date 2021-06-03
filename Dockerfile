@@ -11,6 +11,4 @@ ADD http://opennlp.sourceforge.net/models-1.5/en-ner-organization.bin /usr/local
 ADD http://opennlp.sourceforge.net/models-1.5/en-ner-person.bin /usr/local/tomcat/webapps/models/en-ner-person.bin
 ADD http://opennlp.sourceforge.net/models-1.5/en-ner-location.bin /usr/local/tomcat/webapps/models/en-ner-location.bin
 
-ENV JAVA_OPTS="-Xmx2g"
-
 CMD ["catalina.sh","run"]
